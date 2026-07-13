@@ -13,6 +13,23 @@ News Predictor is an end-to-end Machine Learning web application designed to eva
 
 ---
 
+## ⚙️ Core Pipeline Logic
+
+The machine learning model is trained on a unified structural feature vector matching the pattern:
+
+$$\text{Feature String} = \text{Article Title} + \text{" "} + \text{Article Body Text}$$
+
+When a request passes through the console form, the incoming text is immediately processed and normalized by the backend pipeline through the following sequence:
+
+1. **Text Cleansing:** Strips out all numbers, special characters, and punctuation marks using regular expressions.
+2. **Case Normalization:** Converts alphabetical cases to absolute lowercase tokens to ensure uniform vocabulary matches.
+3. **Stop-words Filtering:** Filters out common English language stop-words (e.g., *the, is, at, which, an*) that don't add semantic weight to credibility detection.
+4. **Morphological Stemming:** Collapses words down to their base root forms using the **Porter Stemmer** algorithm (e.g., *running, runs, ran* all reduce to *run*).
+5. **Feature Vectorization:** Passes the clean string into the fitted `TfidfVectorizer` to create a numerical array.
+6. **Model Prediction:** Inputs the vectorized array into the core classifier matrix for a real-time predictive probability output (`0` for Real News, `1` for Fake News).
+
+---
+
 ## 🛠️ Tech Stack & Dependencies
 
 ### Machine Learning & Pipeline:
