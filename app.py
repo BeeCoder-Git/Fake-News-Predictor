@@ -4,9 +4,9 @@ import re
 import nltk
 from nltk.corpus import stopwords
 from nltk.stem.porter import PorterStemmer
-from streamlit import title
 
-app = Flask(__name__)
+# Configure Flask to search for HTML templates in the immediate root workspace directory
+app = Flask(__name__, template_folder='.')
 
 # Preload text processing tools
 try:
@@ -32,21 +32,21 @@ def preprocess_text(content):
 @app.route('/', methods=['GET', 'POST'])
 def home():
     prediction_result = None
-    input_data = {"title": "", "text": "", "category": "Politics"}
+    input_data = {"title": "", "text": ""}
 
     if request.method == 'POST':
         # Retrieve form data
         title = request.form.get('title', '')
         text = request.form.get('text', '')
-        category = request.form.get('category', 'Politics')
         
         # Preserve input data to fill the form back up
-        input_data = {"title": title, "text": text, "category": category}
+        input_data = {"title": title, "text": text}
 
         if title.strip() and text.strip():
             # Remapped strictly to title + space + text
             combined_content = f"{title} {text}" 
             clean_text = preprocess_text(combined_content)
+            
             # Vectorize and Predict
             vectorized_input = vectorizer.transform([clean_text])
             prediction = model.predict(vectorized_input)[0]
