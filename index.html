@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Predictor — Intelligence Platform</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        /* Smooth subtle transitions across the board */
+        * { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen selection:bg-blue-500 selection:text-white">
+
+    <div class="max-w-4xl mx-auto px-6 py-16">
+        
+        <!-- Header Section -->
+        <header class="text-center mb-12">
+            <div class="inline-flex items-center gap-2 bg-slate-800 border border-slate-700 px-4 py-1.5 rounded-full text-xs font-medium tracking-wide text-blue-400 uppercase mb-4 shadow-sm">
+                <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+                NLP Core Engine v2.0 Active
+            </div>
+            <h1 class="text-4xl font-black tracking-tight text-white sm:text-5xl lg:text-6xl bg-clip-text bg-linear-to-r from-white via-slate-200 to-slate-400">
+                News Predictor
+            </h1>
+            <p class="mt-4 text-base text-slate-400 max-w-xl mx-auto font-normal leading-relaxed">
+                Analyze text structures, semantic patterns, and metadata distribution using advanced feature extraction matrices.
+            </p>
+        </header>
+
+        <!-- Dynamic Results Card Component -->
+        {% if result %}
+        <div class="mb-10 p-6 rounded-2xl border backdrop-blur-md shadow-xl transform scale-100 animate-fade-in
+            {% if result.status == 'fake' %} 
+                bg-red-950/40 border-red-500/30 text-red-200 shadow-red-950/20
+            {% else %} 
+                bg-emerald-950/40 border-emerald-500/30 text-emerald-200 shadow-emerald-950/20
+            {% endif %}">
+            <div class="flex items-start gap-4">
+                <div class="p-3 rounded-xl {% if result.status == 'fake' %} bg-red-500/10 text-red-400 {% else %} bg-emerald-500/10 text-emerald-400 {% endif %}">
+                    {% if result.status == 'fake' %}
+                        <!-- Red Flag Icon -->
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                    {% else %}
+                        <!-- Green Verified Icon -->
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                    {% endif %}
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-white tracking-tight">
+                        {{ result.title }}
+                    </h3>
+                    <p class="mt-1.5 text-sm leading-relaxed opacity-85">
+                        {{ result.desc }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Premium Input Workspace Container -->
+        <div class="bg-slate-800/60 backdrop-blur-lg rounded-2xl shadow-2xl border border-slate-700/50 overflow-hidden">
+            <div class="px-8 py-4 bg-slate-800 border-b border-slate-700/50 flex justify-between items-center">
+                <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Analysis Console</span>
+                <span class="text-xs text-slate-500 font-mono">UTF-8 Ready</span>
+            </div>
+
+            <form action="/" method="POST" class="p-8 space-y-6">
+                <!-- Headline/Title Form Field -->
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center">
+                        <label for="title" class="text-xs font-bold uppercase tracking-wider text-slate-300">📰 Headline Title</label>
+                        <span class="text-xs text-slate-500">Required</span>
+                    </div>
+                    <input type="text" name="title" id="title" required
+                           value="{{ input_data.title }}"
+                           placeholder="Paste the full unedited news headline..." 
+                           class="w-full bg-slate-900/80 border border-slate-700 rounded-xl px-4 py-3.5 text-white placeholder-slate-500 focus:outline-hidden focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 text-sm tracking-wide shadow-inner">
+                </div>
+
+                <!-- Text Body Workspace Form Field -->
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center">
+                        <label for="text" class="text-xs font-bold uppercase tracking-wider text-slate-300">📝 Complete Article Body</label>
+                        <span class="text-xs text-slate-500">Deep Extraction</span>
+                    </div>
+                    <textarea name="text" id="text" rows="7" required
+                              placeholder="Paste the underlying text content block here..." 
+                              class="w-full bg-slate-900/80 border border-slate-700 rounded-xl px-4 py-3.5 text-white placeholder-slate-500 focus:outline-hidden focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 text-sm tracking-wide font-normal leading-relaxed shadow-inner resize-none">{{ input_data.text }}</textarea>
+                </div>
+
+                <!-- Action Execution Button Component -->
+                <div class="pt-2">
+                    <button type="submit" 
+                            class="w-full relative group py-4 px-6 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl shadow-lg shadow-blue-950/50 hover:shadow-blue-500/20 active:scale-[0.99] transition transform duration-150 cursor-pointer text-sm uppercase tracking-wider">
+                        <div class="absolute inset-0 w-full h-full rounded-xl bg-white/10 opacity-0 group-hover:opacity-100 transition duration-150"></div>
+                        Execute Pipeline Analysis
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Footer Info -->
+        <footer class="mt-8 text-center">
+            <p class="text-xs text-slate-600 font-mono">Data pipeline vectorized via TF-IDF matrices and structural tokenization.</p>
+        </footer>
+    </div>
+
+</body>
+</html>
